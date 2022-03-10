@@ -5,12 +5,25 @@ window.onload = function() {
     const input = document.getElementById("input")
     const autoFrameBox = document.getElementById('auto-frame-box')
     const container = document.getElementById('container')
-    input.addEventListener('focus', (e) => {
-        autoFrameBox.classList.toggle('close')
+    const deleteBtn = document.getElementById('del-btn')
+
+    document.body.addEventListener('click', () => {
+        autoFrameBox.classList.add('close')
     })
-    
-    input.addEventListener('blur', (e)=> {
-        autoFrameBox.classList.toggle('close')
+
+    deleteBtn.addEventListener('click', () => {
+        document.getElementById("input").value = ''
+        appendAutoCompleteList([])
+    })
+
+    input.addEventListener('click', (e) => {
+        e.stopPropagation()
+        autoFrameBox.classList.remove('close')
+    })
+
+    autoFrameBox.addEventListener('click', (e) => {
+        e.stopPropagation()
+        // 하위 요소들에 이벤트 리스너 등록
     })
 
     const appendAutoCompleteList = (list) => {
@@ -18,6 +31,7 @@ window.onload = function() {
 
         list.forEach(({name: keyword}) => {
             const elem = document.createElement('li')
+            elem.classList.add('item')
             elem.textContent = keyword
             fragmentBox.appendChild(elem)
         })
@@ -25,7 +39,7 @@ window.onload = function() {
         container.appendChild(fragmentBox)
     }
 
-    const getAutoCompleteList = debounce(async (keyword) => {
+    const getAutoCompleteListByKeyword = debounce(async (keyword) => {
         try {
             if (!keyword) {
                 appendAutoCompleteList([])
@@ -50,7 +64,7 @@ window.onload = function() {
         delay: 300,
     })
 
-    input.addEventListener('keyup', (e) => {
-        getAutoCompleteList(e.target.value)
+    input.addEventListener('input', (e) => {
+        getAutoCompleteListByKeyword(e.target.value)
     })
 }

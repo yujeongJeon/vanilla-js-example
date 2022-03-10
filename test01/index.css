@@ -1,5 +1,17 @@
 html, body {
     margin: 0 auto;
+    height: 100%;
+    padding: 0;
+}
+
+ul, li {
+    list-style: none;
+    padding: 0;
+}
+
+.title {
+    margin: 0 auto;
+    padding: 10px 0;
 }
 
 .wrapper {
@@ -29,13 +41,17 @@ html, body {
     display: none;
 }
 
-.empty_box {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.btn {
+    height: 45px;
+    padding: 5px 15px;
+    font-size: 1rem;
 }
 
-.empty_box.close {
-    display: none;
+.item {
+    padding: 3px 0;
+}
+
+.item:hover {
+    background-color: #e2e2e2;
+    cursor: pointer;
 }
