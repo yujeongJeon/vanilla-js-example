@@ -30,6 +30,7 @@ export class SearchDirector {
         }
         if (instance instanceof DeleteButton) {
             this.autoComplete.emptyList()
+            this.autoComplete.cancelCallHistory()
             this.textBox.empty()
         }
     }

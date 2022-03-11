@@ -26,3 +26,5 @@ export const debounce = (fn, {delay} = {delay: 500}) => {
 export const getIntersectionArray = (targetList, sourceList, key) => {
     return targetList.filter((targetItem) => sourceList.some((srcItem) => srcItem[key] === targetItem[key]))
 }
+
+export const isFunction = (fn) => typeof fn === 'function'

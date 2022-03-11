@@ -1,3 +1,5 @@
+import { isFunction } from "../utils/index.js"
+
 class Fetcher {
     controller = null
 
@@ -5,11 +7,16 @@ class Fetcher {
         this.controller = new AbortController()
     }
 
-    async get({url, onError}) {
+    async get({url, onError, onBefore, onSuccess}) {
+        isFunction(onBefore) && onBefore()
         const result = await fetch(url, {signal: this.controller.signal})
-        .then((response) => response.json())
+        .then((response) => {
+            const res = response.json()
+            isFunction(onSuccess) && onSuccess(res)
+            return res
+        })
         .catch(function(e) {
-            typeof onError === 'function' && onError(e)
+            isFunction(onError) && onError(e)
             throw e
         })
         return result

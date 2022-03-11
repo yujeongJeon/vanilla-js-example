@@ -80,23 +80,27 @@ export class AutoCompleteBox {
 
             const lowerCaseKeyword = keyword.toLowerCase()
 
-            this.loadingText.show()
-            this.prevCall = this.fetcher
-
-            const {results} = await this.fetcher.get({url: 'https://swapi.dev/api/people'})
+            const {results} = await this.fetcher.get({
+                url: 'https://swapi.dev/api/people', 
+                onBefore: () => {
+                    this.loadingText.show()
+                    this.prevCall = this.fetcher
+                },
+                onSuccess: () => {
+                    this.loadingText.hide()
+                    this.prevCall = null
+                }
+            })
             const autoCompleteList = this.filterByKeyword(results, lowerCaseKeyword)
-
-            this.loadingText.hide()
-            this.prevCall = null
-
             this.appendAutoCompleteList(getIntersectionArray(results, autoCompleteList, 'url'))
         } catch (e) {
             if (e.name === 'AbortError') {
                 this.appendAutoCompleteList([])
+                return
             }
             // TODO : ERROR HANDLING
-            window.alert('검색 중 오류가 발생했습니다.')
             this.loadingText.hide()
+            window.alert('검색 중 오류가 발생했습니다.')
         }
     }, {
         delay: 300,
@@ -108,5 +112,11 @@ export class AutoCompleteBox {
 
     emptyList() {
         this.container.innerHTML = '';
+    }
+
+    cancelCallHistory() {
+        this.fetcher.cancel()
+        this.fetcher = createFetcher()
+        this.loadingText.hide()
     }
 }
