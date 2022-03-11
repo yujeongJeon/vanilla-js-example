@@ -1,19 +1,24 @@
 import { Collegue } from "./Collegue.js"
 
 export class DeleteButton extends Collegue {
-    isShow = false
+    deleteBtn = document.getElementById('del-btn')
+
+    render() {
+        this.deleteBtn.addEventListener('click', () => {
+            this.onClick()
+        })
+    }
 
     toggleShow(value) {
-        console.log('삭제버튼 토글 : ', value)
         if (!value) {
-            this.isShow = false
+            this.deleteBtn.classList.add('invisible')
             return
         }
-        this.isShow = true
+        this.deleteBtn.classList.remove('invisible')
     }
     
     onClick() {
-        this.change(this)
-        this.isShow = false
+        this.change(this, {type: 'click'})
+        this.deleteBtn.classList.add('invisible')
     }
 }

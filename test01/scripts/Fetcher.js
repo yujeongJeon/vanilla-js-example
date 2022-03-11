@@ -12,7 +12,7 @@ class Fetcher {
             onError(e)
             throw e
         })
-        return result.results
+        return result
     }
 
     cancel() {

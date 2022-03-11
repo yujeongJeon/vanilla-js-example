@@ -19,14 +19,16 @@ export class SearchDirector {
         this.autoComplete.mediator = this
     }
 
-    change(instance) {
+    change(instance, {type}) {
         if (instance instanceof TextBox) {
-            console.log('textbox의 변경!')
-            this.autoComplete.search(instance.value)
-            this.deleteButton.toggleShow(instance.value)
+            if (type === 'change') {
+                this.autoComplete.search(instance.value)
+                this.deleteButton.toggleShow(instance.value)
+            } else if (type === 'click') {
+                this.autoComplete.show()
+            }
         }
         if (instance instanceof DeleteButton) {
-            console.log('deleteButton의 클릭')
             this.autoComplete.emptyList()
             this.textBox.empty()
         }

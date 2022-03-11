@@ -1,7 +1,7 @@
 export class Collegue {
     mediator = null
 
-    change(self) {
-        this.mediator.change(self)
+    change(self, {type}) {
+        this.mediator.change(self, {type})
     }
 }

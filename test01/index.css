@@ -16,6 +16,7 @@ ul, li {
 
 .wrapper {
     position: relative;
+    z-index: 2000;
 }
 
 .search_input {
@@ -32,9 +33,12 @@ ul, li {
 .auto_frame {
     position: absolute;
     top: 45px;
+    left: 0;
     border: 1px solid #e4e7e8;
     min-width: 310px;
     padding: 10px;
+    background-color: #fff;
+    z-index: 300;
 }
 
 .auto_frame.close {
@@ -47,6 +51,10 @@ ul, li {
     font-size: 1rem;
 }
 
+#del-btn.invisible {
+    visibility: hidden;
+}
+
 .item {
     padding: 3px 0;
 }
@@ -54,4 +62,8 @@ ul, li {
 .item:hover {
     background-color: #e2e2e2;
     cursor: pointer;
+}
+
+.detail_box {
+    position: relative;
 }
