@@ -1,11 +1,21 @@
 import { debounce, getIntersectionArray } from "../utils/index.js"
+import { AutoCompleteBox } from "./AutoCompleteBox.js"
+import { DeleteButton } from "./DeleteButton.js"
 import { createFetcher } from "./Fetcher.js"
+import { SearchDirector } from "./SearchDirector.js"
+import { TextBox } from "./TextBox.js"
 
 window.onload = function() {
     const input = document.getElementById("input")
     const autoFrameBox = document.getElementById('auto-frame-box')
     const container = document.getElementById('container')
     const deleteBtn = document.getElementById('del-btn')
+
+    const textBox = new TextBox()
+    const deleteButton = new DeleteButton()
+    const autoCompleleBox = new AutoCompleteBox()
+
+    const searchDirector = new SearchDirector(textBox, deleteButton, autoCompleleBox)
 
     document.body.addEventListener('click', () => {
         autoFrameBox.classList.add('close')
@@ -14,11 +24,13 @@ window.onload = function() {
     deleteBtn.addEventListener('click', () => {
         document.getElementById("input").value = ''
         appendAutoCompleteList([])
+        deleteButton.onClick()
     })
 
     input.addEventListener('click', (e) => {
         e.stopPropagation()
         autoFrameBox.classList.remove('close')
+
     })
 
     autoFrameBox.addEventListener('click', (e) => {
@@ -66,5 +78,6 @@ window.onload = function() {
 
     input.addEventListener('input', (e) => {
         getAutoCompleteListByKeyword(e.target.value)
+        textBox.onChange(e.target.value)
     })
 }
