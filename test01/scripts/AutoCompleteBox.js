@@ -95,6 +95,8 @@ export class AutoCompleteBox {
                 this.appendAutoCompleteList([])
             }
             // TODO : ERROR HANDLING
+            window.alert('검색 중 오류가 발생했습니다.')
+            this.loadingText.hide()
         }
     }, {
         delay: 300,
