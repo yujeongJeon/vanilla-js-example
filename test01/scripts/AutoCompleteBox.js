@@ -8,6 +8,14 @@ export class AutoCompleteBox {
 
     fetcher = createFetcher()
 
+    loadingText = null
+
+    prevCall = null
+
+    constructor(loadingText) {
+        this.loadingText = loadingText
+    }
+
     render() {
         document.body.addEventListener('click', () => {
             this.hide()
@@ -32,6 +40,10 @@ export class AutoCompleteBox {
         this.autoFrameBox.classList.add('close')
     }
 
+    clearContainer() {
+        this.container.innerHTML = '';
+    }
+
     appendAutoCompleteList(list) {
         const fragmentBox = document.createDocumentFragment()
 
@@ -42,7 +54,6 @@ export class AutoCompleteBox {
             elem.id = url
             fragmentBox.appendChild(elem)
         })
-        this.container.innerHTML = '';
         this.container.appendChild(fragmentBox)
     }
 
@@ -51,35 +62,45 @@ export class AutoCompleteBox {
         .map(({url, name}) => ({url, name : name.toLowerCase()}))
         .filter(({name}) => name.includes(keyword))
     }
-
+    
     debounceSearch = debounce(async (keyword) => {
-        console.log(keyword)
         try {
-            if (!keyword) {
-                appendAutoCompleteList([])
+            if (this.prevCall) {
+                this.prevCall.cancel()
+                this.prevCall = null
+                this.fetcher = createFetcher()
+            }
+            this.clearContainer()
+
+            if (!keyword || keyword.length < 1) {
+                this.loadingText.hide()
+                setTimeout(() => this.appendAutoCompleteList([]), 0)
                 return
             }
 
             const lowerCaseKeyword = keyword.toLowerCase()
 
-            const {results} = await this.fetcher.get({url: 'https://swapi.dev/api/people', onError: (error) => {
-                console.log(error.message)
-            }})
+            this.loadingText.show()
+            this.prevCall = this.fetcher
+
+            const {results} = await this.fetcher.get({url: 'https://swapi.dev/api/people'})
             const autoCompleteList = this.filterByKeyword(results, lowerCaseKeyword)
+
+            this.loadingText.hide()
+            this.prevCall = null
 
             this.appendAutoCompleteList(getIntersectionArray(results, autoCompleteList, 'url'))
         } catch (e) {
-            console.error(e)
+            if (e.name === 'AbortError') {
+                this.appendAutoCompleteList([])
+            }
+            // TODO : ERROR HANDLING
         }
     }, {
         delay: 300,
     })
 
     search(keyword) {
-        if (!keyword) {
-            this.emptyList()
-            return
-        }
         this.debounceSearch(keyword)
     }
 

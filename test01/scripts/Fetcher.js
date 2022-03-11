@@ -9,7 +9,7 @@ class Fetcher {
         const result = await fetch(url, {signal: this.controller.signal})
         .then((response) => response.json())
         .catch(function(e) {
-            onError(e)
+            typeof onError === 'function' && onError(e)
             throw e
         })
         return result

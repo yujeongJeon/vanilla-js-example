@@ -67,3 +67,12 @@ ul, li {
 .detail_box {
     position: relative;
 }
+
+.loading {
+    will-change: transform;
+    transform: translate(0px, -100vh);
+}
+
+.loading.visible {
+    transform: translate(0px, 0px);
+}
