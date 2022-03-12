@@ -1,5 +1,6 @@
 import { debounce, getIntersectionArray } from "../utils/index.js"
 import { createFetcher } from "./Fetcher.js"
+import { createToggleManager } from "./ToggleManager.js"
 
 export class AutoCompleteBox {
     container = document.getElementById('container')
@@ -12,8 +13,11 @@ export class AutoCompleteBox {
 
     prevCall = null
 
+    frameBoxToggleManager = null
+
     constructor(loadingText) {
         this.loadingText = loadingText
+        this.frameBoxToggleManager = createToggleManager(this.autoFrameBox, 'close')
     }
 
     render() {
@@ -33,11 +37,11 @@ export class AutoCompleteBox {
     }
 
     show() {
-        this.autoFrameBox.classList.remove('close')
+        this.frameBoxToggleManager.show()
     }
 
     hide() {
-        this.autoFrameBox.classList.add('close')
+        this.frameBoxToggleManager.hide()
     }
 
     clearContainer() {
@@ -98,7 +102,7 @@ export class AutoCompleteBox {
                 this.appendAutoCompleteList([])
                 return
             }
-            // TODO : ERROR HANDLING
+            // TODO : RETRY TWICE
             this.loadingText.hide()
             window.alert('검색 중 오류가 발생했습니다.')
         }

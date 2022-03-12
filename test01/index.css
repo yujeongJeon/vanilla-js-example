@@ -70,9 +70,9 @@ ul, li {
 
 .loading {
     will-change: transform;
-    transform: translate(0px, -100vh);
+    transform: translate(0px, 0px);   
 }
 
-.loading.visible {
-    transform: translate(0px, 0px);
+.loading.close {
+    transform: translate(0px, -100vh);
 }

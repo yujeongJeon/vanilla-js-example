@@ -1,7 +1,14 @@
 import { Collegue } from "./Collegue.js"
+import { createToggleManager } from "./ToggleManager.js"
 
 export class DeleteButton extends Collegue {
     deleteBtn = document.getElementById('del-btn')
+    btnToggleManager = null
+
+    constructor() {
+        super()
+        this.btnToggleManager = createToggleManager(this.deleteBtn, 'invisible')
+    }
 
     render() {
         this.deleteBtn.addEventListener('click', () => {
@@ -11,14 +18,14 @@ export class DeleteButton extends Collegue {
 
     toggleShow(value) {
         if (!value) {
-            this.deleteBtn.classList.add('invisible')
+            this.btnToggleManager.hide()
             return
         }
-        this.deleteBtn.classList.remove('invisible')
+        this.btnToggleManager.show()
     }
     
     onClick() {
         this.change(this, {type: 'click'})
-        this.deleteBtn.classList.add('invisible')
+        this.btnToggleManager.hide()
     }
 }
