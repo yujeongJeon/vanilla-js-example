@@ -28,3 +28,5 @@ export const getIntersectionArray = (targetList, sourceList, key) => {
 }
 
 export const isFunction = (fn) => typeof fn === 'function'
+
+export const sleep = () => new Promise((resolve, reject) => setTimeout(() => reject('test reject'), 3000))

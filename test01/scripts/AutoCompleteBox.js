@@ -1,5 +1,6 @@
 import { debounce, getIntersectionArray } from "../utils/index.js"
 import { createFetcher } from "./Fetcher.js"
+import { RetryManager } from "./RetryManager.js"
 import { createToggleManager } from "./ToggleManager.js"
 
 export class AutoCompleteBox {
@@ -15,9 +16,12 @@ export class AutoCompleteBox {
 
     frameBoxToggleManager = null
 
+    searchRetryManager = null
+
     constructor(loadingText) {
         this.loadingText = loadingText
         this.frameBoxToggleManager = createToggleManager(this.autoFrameBox, 'close')
+        this.searchRetryManager = new RetryManager()
     }
 
     render() {
@@ -102,9 +106,18 @@ export class AutoCompleteBox {
                 this.appendAutoCompleteList([])
                 return
             }
-            // TODO : RETRY TWICE
-            this.loadingText.hide()
-            window.alert('검색 중 오류가 발생했습니다.')
+            this.searchRetryManager.retry({
+                url: 'https://swapi.dev/api/people', 
+                onBefore: () => {}, 
+                onSuccess: () => {
+                    this.loadingText.hide()
+                    this.prevCall = null
+                },
+                onError: () => {
+                    this.loadingText.hide()
+                    window.alert('검색 중 오류가 발생했습니다.')
+                }
+            })
         }
     }, {
         delay: 300,
